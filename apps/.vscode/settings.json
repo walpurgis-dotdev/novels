@@ -1,0 +1,90 @@
+{
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cls\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["tw=\"([^\"]*)\""]
+  ],
+  "scss.validate": false,
+  "css.validate": false,
+  "tailwindCSS.classAttributes": ["class", "className", "classNames"],
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.associations": {
+    "*.ignore": "plaintext",
+    "*.txt": "plaintext"
+  },
+  "editor.tabSize": 2,
+  "eslint.format.enable": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "search.exclude": {
+    "**/node_modules": false,
+    "**/node_modulesDISABLE": true
+  },
+  "cSpell.enabled": true,
+  "cSpell.words": [
+    "bu",
+    "bunx",
+    "camelcase",
+    "childrens",
+    "CHONLOC",
+    "classname",
+    "cloudinary",
+    "cmdk",
+    "Dịch",
+    "Embla",
+    "hoangthaininh",
+    "hoangthaninh",
+    "lerp",
+    "Multiplestep",
+    "navitem",
+    "navs",
+    "plaiceholder",
+    "pnpx",
+    "revo",
+    "Roboto",
+    "scroller",
+    "shadcn",
+    "sonner",
+    "Truyen",
+    "uploadthing",
+    "vaul",
+    "webp",
+    "zongheng"
+  ],
+  "editor.unicodeHighlight.allowedCharacters": {
+    "a": true,
+    "а": true,
+    "А": true,
+    "б": true,
+    "В": true,
+    "е": true,
+    "Е": true,
+    "з": true,
+    "З": true,
+    "і": true,
+    "І": true,
+    "н": true,
+    "Н": true,
+    "о": true,
+    "р": true,
+    "Р": true,
+    "с": true,
+    "у": true,
+    "У": true
+  },
+  "eslint.lintTask.options": "-c ${workspaceFolder}/eslint.config.js",
+  "eslint.experimental.useFlatConfig": true,
+  "prettier.enable": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "never"
+  },
+  "eslint.validate": ["javascript", "javascriptreact", "vue", "html", "markdown", "json", "jsonc", "yaml", "toml"]
+}

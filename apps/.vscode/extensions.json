@@ -1,0 +1,14 @@
+{
+	"recommendations": [
+		"streetsidesoftware.code-spell-checker",
+		"usernamehw.errorlens",
+		"dbaeumer.vscode-eslint",
+		"github.copilot",
+		"esbenp.prettier-vscode",
+		"bradlc.vscode-tailwindcss",
+		"omkarbhede.tailwindcss-tune",
+		"biomejs.biome",
+		"dsznajder.es7-react-js-snippets",
+		"alduncanson.react-hooks-snippets"
+	]
+}

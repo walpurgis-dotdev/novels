@@ -1,0 +1,434 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Blacklist {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  token      String   @unique
+  createdAt  DateTime @default(now())
+  expiryDate DateTime
+  user       Users    @relation(fields: [userId], references: [id])
+
+  @@index([token])
+}
+
+model Permissions {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     Users[]  @relation("UserPermissions")
+}
+
+model Adapter {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Users     Users[]  @relation("UserAdapter")
+}
+
+model userProps {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     Users[]  @relation("UsersTouserProps")
+}
+
+model Users {
+  id                String           @id @default(cuid())
+  name              String           @db.VarChar(50)
+  prefix            String?
+  email             String           @unique @db.VarChar(191)
+  password          String
+  bio               String?
+  birthday          DateTime?
+  flowers           Int              @default(0)
+  money             Int              @default(0)
+  isBlocked         Boolean          @default(false)
+  role              Role             @default(USER)
+  points            Int              @default(0)
+  isVerified        Boolean?         @default(false)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  levelId           Int?
+  avatar            Json?
+  Blacklist         Blacklist[]
+  Blogs             Blogs[]
+  comments          Comments[]
+  donations         Donations[]
+  history           History[]
+  approvedNovels    Novels[]         @relation("ApprovedNovels")
+  convertedNovels   Novels[]         @relation("ConvertedNovels")
+  payments          Payments[]
+  ratingChapters    RatingChapters[]
+  reactions         Reactions[]
+  reports           Reports[]
+  likedNovels       Reviews[]        @relation("likedNovels")
+  reviewNovels      Reviews[]        @relation("reviewNovels")
+  level             Levels?          @relation(fields: [levelId], references: [id])
+  Votes             Votes[]
+  tasks             Tasks[]          @relation("AssignedTasks")
+  favoriteNovels    Novels[]         @relation("FavoriteNovels")
+  likedComments     Comments[]       @relation("LikedComments")
+  purchasedChapter  Chapters[]       @relation("PurchasedChapters")
+  adapter           Adapter[]        @relation("UserAdapter")
+  notifications     Notifications[]  @relation("UserNotices")
+  permissions       Permissions[]    @relation("UserPermissions")
+  readNotifications Notifications[]  @relation("UserReadNotices")
+  userProps         userProps[]      @relation("UsersTouserProps")
+
+  @@index([email])
+  @@index([id])
+}
+
+model Otps {
+  id      Int      @id @default(autoincrement())
+  expires DateTime
+  email   String
+  otp     String   @unique
+
+  @@index([otp])
+  @@index([email])
+}
+
+model Blogs {
+  id        String   @id @default(cuid())
+  title     String   @db.VarChar(200)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      Users    @relation(fields: [userId], references: [id])
+}
+
+model Payments {
+  id          String      @id @default(cuid())
+  amount      Int
+  paymentFrom PaymentType @default(KHAC)
+  userId      String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        Users       @relation(fields: [userId], references: [id])
+}
+
+model Authors {
+  id           String   @id @default(cuid())
+  name         String   @unique @db.VarChar(200)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  originalName String   @unique @db.VarChar(200)
+  novels       Novels[]
+
+  @@unique([name, originalName], name: "AuthorNameOriginalName")
+  @@index([name, originalName])
+}
+
+model Levels {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique @db.VarChar(100)
+  pointRequire Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  users        Users[]
+}
+
+model Novels {
+  id           String      @id @default(cuid())
+  title        String      @unique @db.VarChar(255)
+  description  String?
+  slug         String      @unique @db.VarChar(100)
+  status       Status      @default(ONGOING)
+  props        NovelProps  @default(MIENPHI)
+  nominate     Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  converterId  String
+  authorId     String
+  isPublished  Boolean     @default(false)
+  originalName String      @unique(map: "Novels_orginalName_key")
+  originalLink String      @unique
+  approvedById String?
+  genreId      Int
+  covers       Json?
+  chapters     Chapters[]
+  comments     Comments[]
+  donations    Donations[]
+  history      History[]
+  approvedBy   Users?      @relation("ApprovedNovels", fields: [approvedById], references: [id])
+  Author       Authors     @relation(fields: [authorId], references: [id])
+  converter    Users       @relation("ConvertedNovels", fields: [converterId], references: [id])
+  Genre        Genres      @relation(fields: [genreId], references: [id])
+  reports      Reports[]
+  reviews      Reviews[]
+  views        Views[]
+  Vote         Votes[]
+  favoriteBy   Users[]     @relation("FavoriteNovels")
+  tags         Tags[]      @relation("novelsTags")
+
+  @@unique([title, authorId], name: "TitleAuthor")
+  @@unique([id, converterId], name: "NovelConverter")
+  @@unique([originalName, originalLink], map: "Novels_orginalName_originalLink_key")
+  @@index([title])
+  @@index([originalName, originalLink], map: "Novels_orginalName_originalLink_idx")
+}
+
+model Views {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  novelId   String?
+  chapterId String?
+  views     Int       @default(0)
+  chapter   Chapters? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  novel     Novels?   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+}
+
+model Reports {
+  id        Int        @id @default(autoincrement())
+  content   String
+  type      ReportType @default(KHAC)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  userId    String
+  novelId   String?
+  chapterId String?
+  chapter   Chapters?  @relation(fields: [chapterId], references: [id])
+  novel     Novels?    @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  user      Users      @relation(fields: [userId], references: [id])
+}
+
+model Donations {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  amount    Decimal
+  novelId   String
+  userId    String
+  novel     Novels   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  user      Users    @relation(fields: [userId], references: [id])
+
+  @@unique([novelId, userId, createdAt])
+}
+
+model Votes {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  amount    Int
+  novelId   String
+  userId    String
+  novel     Novels   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  user      Users    @relation(fields: [userId], references: [id])
+
+  @@unique([novelId, userId, createdAt])
+  @@unique([novelId, userId], name: "NovelVote")
+}
+
+model Chapters {
+  id            String           @id @unique @default(cuid())
+  title         String
+  content       String
+  chapterNo     Int
+  novelId       String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  countWords    Int              @default(0)
+  novel         Novels           @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  comments      Comments[]
+  history       History[]
+  Notifications Notifications[]
+  rating        RatingChapters[]
+  reactions     Reactions[]
+  reports       Reports[]
+  views         Views[]
+  PurchasedBy   Users[]          @relation("PurchasedChapters")
+
+  @@unique([novelId, chapterNo], name: "NovelChapterNo")
+}
+
+model RatingChapters {
+  id        Int      @id @default(autoincrement())
+  rate      Float    @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  chapterId String
+  chapter   Chapters @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  user      Users    @relation(fields: [userId], references: [id])
+
+  @@unique([chapterId, userId], name: "ChapterRating")
+}
+
+model History {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  novelId   String
+  chapterId String
+  chapter   Chapters @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  novel     Novels   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  user      Users    @relation(fields: [userId], references: [id])
+
+  @@unique([userId, novelId, chapterId], name: "UserNovelChapter")
+}
+
+model Genres {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  novels      Novels[]
+}
+
+model Tags {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  type      TagType  @default(CHARACTER)
+  novels    Novels[] @relation("novelsTags")
+}
+
+model Comments {
+  id        String     @id @default(cuid())
+  content   String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  novelId   String
+  userId    String
+  parentId  String?
+  chapterId String?
+  chapter   Chapters?  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  novel     Novels     @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  parent    Comments?  @relation("ChildComments", fields: [parentId], references: [id], onDelete: Cascade)
+  childrens Comments[] @relation("ChildComments")
+  user      Users      @relation(fields: [userId], references: [id])
+  likedBy   Users[]    @relation("LikedComments")
+
+  @@unique([id, userId], name: "UserComment")
+  @@index([id, novelId], map: "CommentNovel")
+}
+
+model Reactions {
+  id        String       @id @default(cuid())
+  type      ReactionType @default(LIKE)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  userId    String
+  chapterId String
+  chapter   Chapters     @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  user      Users        @relation(fields: [userId], references: [id])
+
+  @@unique([userId, chapterId], name: "UserChapterReaction")
+}
+
+model Reviews {
+  id        String   @id @default(cuid())
+  character Float    @default(0)
+  plot      Float    @default(0)
+  world     Float    @default(0)
+  content   String
+  spoiler   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  likes     Int      @default(0)
+  userId    String
+  likedById String?
+  novelId   String
+  likedBy   Users?   @relation("likedNovels", fields: [likedById], references: [id])
+  novel     Novels   @relation(fields: [novelId], references: [id], onDelete: Cascade)
+  reviewBy  Users    @relation("reviewNovels", fields: [userId], references: [id])
+
+  @@unique([novelId, userId], name: "NovelReview")
+}
+
+model Notifications {
+  id              String     @id @default(cuid())
+  content         String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  chapterId       String?
+  title           String
+  type            NoticeType @default(NEWCHAPTER)
+  relationChapter Chapters?  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  targetUsers     Users[]    @relation("UserNotices")
+  readBy          Users[]    @relation("UserReadNotices")
+}
+
+model Tasks {
+  id        String   @id @default(cuid())
+  title     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  done      Boolean  @default(false)
+  reward    Int
+  assigned  Users[]  @relation("AssignedTasks")
+}
+
+enum Role {
+  ADMIN
+  USER
+  MOD
+  CREATOR
+}
+
+enum PaymentType {
+  CARD
+  MOMO
+  ZALO
+  BANK
+  KHAC
+  PAYPAL
+}
+
+enum NovelProps {
+  CHATLUONGCAO
+  CHONLOC
+  MIENPHI
+  THUPHI
+}
+
+enum ReportType {
+  TRUNGLAP
+  KHIEUDAM
+  CHINHTRI
+  KHAC
+}
+
+enum Status {
+  ONGOING
+  COMPLETED
+  PAUSED
+}
+
+enum TagType {
+  CHARACTER
+  WORLD
+  FACTION
+  SIGHT
+}
+
+enum ReactionType {
+  LIKE
+  LOVE
+  HAHA
+  WOW
+  SAD
+}
+
+enum NoticeType {
+  ADMINMESSAGE
+  NEWCHAPTER
+  SYSTEMMESSAGE
+}
