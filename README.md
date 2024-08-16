@@ -2,7 +2,11 @@
 
 <div align="center">
 
-<img src="assets/github-repo-logo.gif" alt="novels animated logo" height="80">
+<!-- <img src="apps\public\logo.svg" alt="novels animated logo" height="80"> -->
+<picture>
+    <source media="(prefers-color-scheme: light)" srcset="apps\public\logo.svg">
+    <img height="80" src="apps\public\logo.svg">
+  </picture>
 
 <br>
 
@@ -12,6 +16,62 @@
 Novels is the perfect choice for you, with events that can stimulate competition and elevate your potential to new heights.”
 
 </div>
+
+<details>
+  <summary><kbd>Home Page</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/home_page.png">
+    <img width="100%" src="assets/ui/home_page.png">
+  </picture>
+</details>
+
+<details>
+  <summary><kbd>Novel Detail Page</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/novel_detail_page.png">
+    <img width="100%" src="assets/ui/read_novels_and_comment_chapter_page.png">
+  </picture>
+</details>
+
+<details>
+  <summary><kbd>Read the novel in chapters & Chapter Comments Page</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/read_novels_and_comment_chapter_page.png">
+    <img width="100%" src="assets/ui/read_novels_and_comment_chapter_page.png">
+  </picture>
+</details>
+
+<details>
+  <summary><kbd>Search and ranking pages</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/search and ranking pages.png">
+    <img width="100%" src="assets/ui/search and ranking pages.png">
+  </picture>
+</details>
+
+<details>
+  <summary><kbd>Chapter summary popup</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/chapter summary popup.jpg">
+    <img width="100%" src="assets/ui/chapter summary popup.jpg">
+  </picture>
+</details>
+
+<details>
+  <summary><kbd>Translation by AI</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/translation by ai.png">
+    <img width="100%" src="assets/ui/translation by ai.png">
+  </picture>
+</details>
+
+<details>
+  <summary><kbd>New management and creation pages</kbd></summary>
+  <picture>
+    <source media="(prefers-color-scheme: light)" srcset="assets/ui/new management and creation pages.png">
+    <img width="100%" src="assets/ui/new management and creation pages.png">
+  </picture>
+</details>
 
 ## 📑 License
 Licensed under [AGPL-3.0](https://github.com/louiswalpurgis-dotdev/novels/blob/main/LICENSE).
