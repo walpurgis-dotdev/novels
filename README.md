@@ -17,13 +17,9 @@ Novels is the perfect choice for you, with events that can stimulate competition
 
 </div>
 
-<details>
-  <summary><kbd>Home Page</kbd></summary>
-  <picture>
-    <source media="(prefers-color-scheme: light)" srcset="assets/ui/home_page.png">
-    <img width="100%" src="assets/ui/home_page.png">
-  </picture>
-</details>
+<summary><kbd>Home Page</kbd></summary>
+  <source media="(prefers-color-scheme: light)" srcset="assets/ui/home_page.png">
+  <img width="100%" src="assets/ui/home_page.png">
 
 <details>
   <summary><kbd>Novel Detail Page</kbd></summary>
