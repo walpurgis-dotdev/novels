@@ -25,7 +25,7 @@ Novels is the perfect choice for you, with events that can stimulate competition
   <summary><kbd>Novel Detail Page</kbd></summary>
   <picture>
     <source media="(prefers-color-scheme: light)" srcset="assets/ui/novel_detail_page.png">
-    <img width="100%" src="assets/ui/read_novels_and_comment_chapter_page.png">
+    <img width="100%" src="assets/ui/novel_detail_page.png">
   </picture>
 </details>
 
